@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import './App.css';
-import { bankOne, bankTwo } from './sourceFlie';
+import { bankOne } from './sourceFlie';
 
 const App = () => {
   // console.log(bankOne);
-  // console.log(bankTwo);
-  let isPlaying = false;
 
   const [displayName, setDisplayName] = useState('--display--');
   const playAudio = (id) => {
@@ -20,7 +18,7 @@ const App = () => {
     setDisplayName(name);
   };
 
-  const handlerPlaySound = (e) => {
+  const handlerPlaySound = useCallback((e) => {
     const id = e.key.toUpperCase();
     let name;
     if (document.getElementById(id)) {
@@ -31,7 +29,7 @@ const App = () => {
       playAudio(id);
       setDisplayName(name);
     }
-  };
+  }, []);
 
   useEffect(() => {
     document.addEventListener('keydown', handlerPlaySound);
