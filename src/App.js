@@ -3,8 +3,10 @@ import './App.css';
 import { bankOne, bankTwo } from './sourceFlie';
 
 const App = () => {
-  console.log(bankOne);
+  // console.log(bankOne);
   // console.log(bankTwo);
+  let isPlaying = false;
+
   const [displayName, setDisplayName] = useState('--display--');
   const playAudio = (id) => {
     const elId = document.getElementById(id);
@@ -14,23 +16,29 @@ const App = () => {
   const handlerClick = (e) => {
     const name = e.target.id;
     const id = e.target.childNodes[0].id;
-    console.log(name, id);
     playAudio(id);
     setDisplayName(name);
   };
 
-  const handlerKeypress = (e) => {
-    document.addEventListener('keydown', (e) => {
-      const id = e.key.toUpperCase();
-      const name = document.getElementById(id).parentNode.id;
+  const handlerPlaySound = (e) => {
+    const id = e.key.toUpperCase();
+    let name;
+    if (document.getElementById(id)) {
+      name = document.getElementById(id).parentNode.id;
+    }
+
+    if (name && id) {
       playAudio(id);
       setDisplayName(name);
-    });
+    }
   };
 
   useEffect(() => {
-    handlerKeypress();
-  }, [handlerKeypress]);
+    document.addEventListener('keydown', handlerPlaySound);
+    return () => {
+      document.removeEventListener('keydown', handlerPlaySound);
+    };
+  }, [handlerPlaySound]);
 
   return (
     <div className="App">
